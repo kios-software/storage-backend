@@ -15,8 +15,8 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn package shade:shade
-      - mv target/storage-0.0.1-SNAPSHOT .
-      - unzip storage-0.0.1-SNAPSHOT
+      - mv target/storage-0.0.1-SNAPSHOT.jar .
+      - unzip storage-0.0.1-SNAPSHOT.jar
       - rm -rf target tst src buildspec.yml pom.xml HelloWorld-1.0.jar
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
   post_build:
