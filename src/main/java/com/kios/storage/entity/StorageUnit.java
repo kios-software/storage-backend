@@ -1,9 +1,12 @@
 package com.kios.storage.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 /*
  * This class is a more specific drill down into the storage
@@ -18,9 +21,20 @@ public class StorageUnit {
 	private Long id;
 	private StorageClass storageClass;
 	
-	/* TODO: Clearly define the storage sizes somewhere */
-	private StorageSize storageSize;
+	@OneToOne
+	private Property property;
 
+	/* TODO: Clearly define the storage sizes somewhere */
+	private Size storageSize;
+
+	public Property getProperty() {
+		return property;
+	}
+
+	public void setProperty(Property property) {
+		this.property = property;
+	}
+	
 	public StorageClass getStorageClass() {
 		return storageClass;
 	}
@@ -29,11 +43,11 @@ public class StorageUnit {
 		this.storageClass = storageClass;
 	}
 
-	public StorageSize getStorageSize() {
+	public Size getStorageSize() {
 		return storageSize;
 	}
 
-	public void setStorageSize(StorageSize storageSize) {
+	public void setStorageSize(Size storageSize) {
 		this.storageSize = storageSize;
 	}
 
@@ -43,4 +57,3 @@ public class StorageUnit {
 }
 
 enum StorageClass { VEHICLE, BOXES, OTHER }
-enum StorageSize { SMALL, MEDIUM, LARGE, XLARGE, XXLARGE, SUPER }

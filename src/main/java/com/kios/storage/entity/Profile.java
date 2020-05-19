@@ -1,0 +1,80 @@
+package com.kios.storage.entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
+public class Profile {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id;
+	
+	@OneToMany(mappedBy="profile", cascade=CascadeType.ALL)
+	private List<Storage> storage;
+
+	@OneToMany(mappedBy="profile", cascade=CascadeType.ALL)
+	private List<Property> property;
+	
+//	private Long userId;
+	private ProfileType profileType;
+
+	public List<Storage> getStorage() {
+		return storage;
+	}
+
+	public void setStorage(List<Storage> storage) {
+		this.storage = storage;
+	}
+
+	public List<Property> getProperty() {
+		return property;
+	}
+
+	public void setProperty(List<Property> property) {
+		this.property = property;
+	}
+
+	public Long getId() {
+		return id;
+	}
+	
+//	public Long getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(Long userId) {
+//		this.userId = userId;
+//	}
+
+	public ProfileType getProfileType() {
+		return profileType;
+	}
+
+	public void setProfileType(ProfileType profileType) {
+		this.profileType = profileType;
+	}
+	
+//	public Profile(Long userId, ProfileType profileType) {
+////		this.userId = userId;
+//		this.profileType = profileType;
+//	}
+//	public Profile(ProfileType profileType) {
+//		this.profileType = profileType;
+//		this.property = new ArrayList<>();
+//		this.storage = new ArrayList<>();
+//	}
+//	
+	public Profile() {
+		this.property = new ArrayList<>();
+		this.storage = new ArrayList<>();
+	}
+}
+
+enum ProfileType { USER_PROFILE, PROVIDER_PROFILE }

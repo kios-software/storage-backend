@@ -3,11 +3,14 @@ package com.kios.storage.entity;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /* 
@@ -26,7 +29,10 @@ public class Storage {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	private Long ownerId;
+
+	@ManyToOne
+	@JoinColumn(name = "profile_id")
+	private Profile profile;
 	
 	@OneToMany
 	private List<StorageUnit> storageUnits;
@@ -34,17 +40,23 @@ public class Storage {
 	@ElementCollection
 	private Set<StorageOption> storageOptions;
 	
-	public Long getOwnerId() {
-		return ownerId;
+	public Profile getProfile() {
+		return profile;
 	}
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
+	public void setOwner(Profile profile) {
+		this.profile = profile;
 	}
 	public List<StorageUnit> getStorageUnits() {
 		return storageUnits;
 	}
 	public void setStorageUnits(List<StorageUnit> storageUnits) {
 		this.storageUnits = storageUnits;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 	public Long getId() {
 		return id;

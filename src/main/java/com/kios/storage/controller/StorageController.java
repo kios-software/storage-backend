@@ -31,7 +31,6 @@ public class StorageController implements CrudController<Storage, Long> {
 
 	@PostMapping("/create")
 	public ResponseEntity<Storage> create(@RequestBody Storage request) {
-		LOG.info(request.getOwnerId().toString());
 		Storage response = storageService.createEntity(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
