@@ -3,23 +3,30 @@ package com.kios.storage.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Profile {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy="profile", cascade=CascadeType.ALL)
+	@OneToMany
+	@JoinColumn(name = "profile_id")
+	@JsonManagedReference(value = "profile-storage")
 	private List<Storage> storage;
 
-	@OneToMany(mappedBy="profile", cascade=CascadeType.ALL)
+	@OneToMany
+	@JoinColumn(name = "profile_id")
+	@JsonManagedReference(value = "profile-property")
 	private List<Property> property;
 	
 //	private Long userId;

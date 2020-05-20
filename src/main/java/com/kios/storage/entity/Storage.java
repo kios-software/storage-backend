@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 /* 
  * This class represents the physical storage available to lease out to others
  * The idea is that if you can fit 10 cars in your "storage" (in this case maybe
@@ -27,36 +29,44 @@ import javax.persistence.OneToMany;
 @Entity
 public class Storage {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+	
+	private Long testId;
+	
+	public Long getTestId() {
+		return testId;
+	}
 
-	@ManyToOne
+	public void setTestId(Long testId) {
+		this.testId = testId;
+	}
+
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
+	@JsonBackReference(value = "profile-storage")
 	private Profile profile;
 	
+	public Profile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
+	}
+
 	@OneToMany
+	@JoinColumn
 	private List<StorageUnit> storageUnits;
 	
 	@ElementCollection
 	private Set<StorageOption> storageOptions;
 	
-	public Profile getProfile() {
-		return profile;
-	}
-	public void setOwner(Profile profile) {
-		this.profile = profile;
-	}
 	public List<StorageUnit> getStorageUnits() {
 		return storageUnits;
 	}
 	public void setStorageUnits(List<StorageUnit> storageUnits) {
 		this.storageUnits = storageUnits;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public void setProfile(Profile profile) {
-		this.profile = profile;
 	}
 	public Long getId() {
 		return id;

@@ -1,33 +1,37 @@
 package com.kios.storage.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Property {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
-	@JoinColumn(name = "storage")
-	private Profile profile;
+	private Long testId;
 	
-	private Size size;
-
-	@OneToOne
-	private StorageUnit storageUnit;
-	
-	public Long getId() {
-		return id;
+	public Long getTestId() {
+		return testId;
 	}
 
+	public void setTestId(Long testId) {
+		this.testId = testId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "profile_id")
+	@JsonBackReference(value = "profile-property")
+	private Profile profile;
 	public Profile getProfile() {
 		return profile;
 	}
@@ -35,6 +39,26 @@ public class Property {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+
+	private Size size;
+
+//	@OneToOne
+//	private StorageUnit storageUnit;
+//	public StorageUnit getStorageUnit() {
+//		return storageUnit;
+//	}
+//
+//	public void setStorageUnit(StorageUnit storageUnit) {
+//		this.storageUnit = storageUnit;
+//	}
+	
+	private Long storageUnitId;
+	
+	public Long getId() {
+		return id;
+	}
+
+
 
 	public void setId(Long id) {
 		this.id = id;
@@ -48,11 +72,11 @@ public class Property {
 		this.size = size;
 	}
 
-	public StorageUnit getStorageUnit() {
-		return storageUnit;
+	public Long getStorageUnitId() {
+		return storageUnitId;
 	}
 
-	public void setStorageUnit(StorageUnit storageUnit) {
-		this.storageUnit = storageUnit;
+	public void setStorageUnitId(Long storageUnitId) {
+		this.storageUnitId = storageUnitId;
 	}
 }

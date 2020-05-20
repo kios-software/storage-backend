@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kios.storage.entity.Profile;
 import com.kios.storage.entity.Storage;
 import com.kios.storage.repository.StorageRepository;
 import com.kios.storage.repository.StorageUnitRepository;
+import com.kios.storage.service.ProfileService;
 import com.kios.storage.service.StorageService;
 
 @Service
@@ -21,8 +23,14 @@ public class StorageServiceImpl implements StorageService {
 	@Autowired
 	StorageUnitRepository storageUnitRepository;
 	
+	/* My attempt at keeping the two services separate for microservice */
+	@Autowired
+	ProfileService profileService;
+	
 	@Override
 	public Storage createEntity(Storage toSave) {
+		Profile p = profileService.retrieveEntity(toSave.getTestId());
+		toSave.setProfile(p);
 		toSave.getStorageUnits().forEach(s->{
 			storageUnitRepository.save(s);
 		});
