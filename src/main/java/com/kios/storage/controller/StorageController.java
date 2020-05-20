@@ -1,5 +1,7 @@
 package com.kios.storage.controller;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kios.storage.entity.Profile;
 import com.kios.storage.entity.Storage;
+import com.kios.storage.serviceimpl.ProfileServiceImpl;
 import com.kios.storage.serviceimpl.StorageServiceImpl;
 
 /* 
@@ -29,16 +33,19 @@ public class StorageController implements CrudController<Storage, Long> {
 	@Autowired
 	StorageServiceImpl storageService;
 
+	@Autowired
+	ProfileServiceImpl profileService;
+	
 	@PostMapping("/create")
-	public ResponseEntity<Storage> create(@RequestBody Storage request) {
+	public ResponseEntity<Storage> create(@RequestBody Storage request) { 
 		Storage response = storageService.createEntity(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/retrieve/{id}")
 	public ResponseEntity<Storage> retrieve(@PathVariable Long id) {
-		Storage response = storageService.retrieveEntity(id);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		Optional<Storage> response = storageService.retrieveEntity(id);
+		return new ResponseEntity<>(response.get(), HttpStatus.OK);
 	}
 
 	@PostMapping("/update/{id}")

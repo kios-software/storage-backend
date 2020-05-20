@@ -1,12 +1,16 @@
 package com.kios.storage.entity;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /*
  * This class is a more specific drill down into the storage
@@ -17,25 +21,23 @@ import javax.persistence.ManyToOne;
 @Entity
 public class StorageUnit { 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	private StorageClass storageClass;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "storage_id")
+	@JsonBackReference(value = "storage-storage-unit")
 	private Storage storage;
-	public Storage getStorage() {
-		return storage;
-	}
-	public void setStorage(Storage storage) {
-		this.storage = storage;
-	}
-	
-	private Long propertyId;
+
+	@OneToOne
+	@JoinColumn(name = "property_id")
+	@JsonManagedReference(value = "storage-unit-property")
+	private Property property;
 	
 	/* TODO: Clearly define the storage sizes somewhere */
-	private Size storageSize;
+	private Size size;
 
 	public Long getId() {
 		return id;
@@ -46,18 +48,24 @@ public class StorageUnit {
 	public void setStorageClass(StorageClass storageClass) {
 		this.storageClass = storageClass;
 	}
-	public Size getStorageSize() {
-		return storageSize;
+	public Size getSize() {
+		return size;
 	}
-	public void setStorageSize(Size storageSize) {
-		this.storageSize = storageSize;
+	public void setSize(Size size) {
+		this.size = size;
 	}
-	public Long getPropertyId() {
-		return propertyId;
+	public Storage getStorage() {
+		return storage;
 	}
-	public void setPropertyId(Long propertyId) {
-		this.propertyId = propertyId;
+	public void setStorage(Storage storage) {
+		this.storage = storage;
+	}
+	public Property getProperty() {
+		return property;
+	}
+	public void setProperty(Property property) {
+		this.property = property;
 	}
 }
 
-enum StorageClass { VEHICLE, BOXES, OTHER }
+enum StorageClass { VEHICLE, BOX, OTHER }

@@ -1,5 +1,7 @@
 package com.kios.storage.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kios.storage.entity.Profile;
-import com.kios.storage.service.ProfileService;
+import com.kios.storage.serviceimpl.ProfileServiceImpl;
 
 @RestController
 @RequestMapping("/api/profile")
 public class ProfileController implements CrudController<Profile, Long> {
 
 	@Autowired
-	ProfileService profileService;
+	ProfileServiceImpl profileService;
 	
 	@Override
 	@PostMapping("/create")
@@ -30,8 +32,8 @@ public class ProfileController implements CrudController<Profile, Long> {
 	@Override
 	@GetMapping("/retrieve/{id}")
 	public ResponseEntity<Profile> retrieve(@PathVariable Long id) {
-		Profile p = profileService.retrieveEntity(id);
-		return new ResponseEntity<>(p, HttpStatus.OK);
+		Optional<Profile> p = profileService.retrieveEntity(id);
+		return new ResponseEntity<>(p.get(), HttpStatus.OK);
 	}
 
 	@Override

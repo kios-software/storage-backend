@@ -11,6 +11,8 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 /**
  * Handler for requests to Lambda function.
+ * Currently unused
+ * TODO Remove or clean up
  */
 public class Handler implements RequestHandler<Object, Object> {
     public Object handleRequest(final Object input, final Context context) {

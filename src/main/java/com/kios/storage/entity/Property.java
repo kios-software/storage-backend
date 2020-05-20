@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -15,53 +16,40 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Property {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	private Long ownerId;
 	
-	private Long testId;
-	
-	public Long getTestId() {
-		return testId;
+	public Long getOwnerId() {
+		return ownerId;
 	}
 
-	public void setTestId(Long testId) {
-		this.testId = testId;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
 	@JsonBackReference(value = "profile-property")
 	private Profile profile;
+
+	private Size size;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "storage_unit_id")
+	@JsonBackReference(value = "storage-unit-property")
+	private StorageUnit storageUnit;
+
+	public Long getId() {
+		return id;
+	}
 	public Profile getProfile() {
 		return profile;
 	}
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
-	}
-
-	private Size size;
-
-//	@OneToOne
-//	private StorageUnit storageUnit;
-//	public StorageUnit getStorageUnit() {
-//		return storageUnit;
-//	}
-//
-//	public void setStorageUnit(StorageUnit storageUnit) {
-//		this.storageUnit = storageUnit;
-//	}
-	
-	private Long storageUnitId;
-	
-	public Long getId() {
-		return id;
-	}
-
-
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public Size getSize() {
@@ -72,11 +60,11 @@ public class Property {
 		this.size = size;
 	}
 
-	public Long getStorageUnitId() {
-		return storageUnitId;
+	public StorageUnit getStorageUnit() {
+		return storageUnit;
 	}
 
-	public void setStorageUnitId(Long storageUnitId) {
-		this.storageUnitId = storageUnitId;
+	public void setStorageUnit(StorageUnit storageUnit) {
+		this.storageUnit = storageUnit;
 	}
 }

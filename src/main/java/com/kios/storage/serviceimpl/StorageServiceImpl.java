@@ -1,5 +1,7 @@
 package com.kios.storage.serviceimpl;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,9 @@ import com.kios.storage.entity.Profile;
 import com.kios.storage.entity.Storage;
 import com.kios.storage.repository.StorageRepository;
 import com.kios.storage.repository.StorageUnitRepository;
-import com.kios.storage.service.ProfileService;
 import com.kios.storage.service.StorageService;
+import com.kios.storage.util.BadRequestException;
+import com.kios.storage.util.ProfileNotFoundException;
 
 @Service
 public class StorageServiceImpl implements StorageService {
@@ -25,21 +28,27 @@ public class StorageServiceImpl implements StorageService {
 	
 	/* My attempt at keeping the two services separate for microservice */
 	@Autowired
-	ProfileService profileService;
+	ProfileServiceImpl profileService;
 	
 	@Override
 	public Storage createEntity(Storage toSave) {
-		Profile p = profileService.retrieveEntity(toSave.getTestId());
-		toSave.setProfile(p);
-		toSave.getStorageUnits().forEach(s->{
-			storageUnitRepository.save(s);
-		});
-		return storageRepository.save(toSave);
+		if(toSave.getOwnerId() == null) {
+			throw new BadRequestException("Null OwnerId provided");
+		} else {
+			Profile p = profileService.retrieveEntity(toSave.getOwnerId())
+					.orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
+			toSave.setProfile(p);
+			toSave.getStorageUnits().forEach(s->{
+				s.setProperty(null);
+				storageUnitRepository.save(s);
+			});
+			return storageRepository.save(toSave);
+		}
 	}
 
 	@Override
-	public Storage retrieveEntity(Long id) {
-		return storageRepository.findById(id).get();
+	public Optional<Storage> retrieveEntity(Long id) {
+		return storageRepository.findById(id);
 	}
 
 	@Override

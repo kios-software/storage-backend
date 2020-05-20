@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /* 
  * This class represents the physical storage available to lease out to others
@@ -32,14 +33,14 @@ public class Storage {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private Long testId;
+	private Long ownerId;
 	
-	public Long getTestId() {
-		return testId;
+	public Long getOwnerId() {
+		return ownerId;
 	}
 
-	public void setTestId(Long testId) {
-		this.testId = testId;
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -55,8 +56,9 @@ public class Storage {
 		this.profile = profile;
 	}
 
-	@OneToMany
-	@JoinColumn
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "storage_id")
+	@JsonManagedReference(value = "storage-storage-unit")
 	private List<StorageUnit> storageUnits;
 	
 	@ElementCollection
