@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kios.storage.dto.PropertyStorageRequest;
 import com.kios.storage.entity.Profile;
 import com.kios.storage.entity.Storage;
 import com.kios.storage.repository.StorageRepository;
@@ -67,5 +68,11 @@ public class StorageServiceImpl implements StorageService {
 			LOG.error(e.getMessage());
 			return false;
 		}
+	}
+
+	@Override
+	public Storage storeProperty(PropertyStorageRequest propertyStorageRequest) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

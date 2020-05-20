@@ -1,5 +1,6 @@
 package com.kios.storage.service;
 
+import com.kios.storage.dto.PropertyStorageRequest;
 import com.kios.storage.entity.Storage;
 
 public interface StorageService extends CrudService<Storage, Long> {
