@@ -1,1 +1,13 @@
 language: java
+
+# blocklist - do not build
+branches:
+  except:
+  - legacy
+  - experimental
+
+# safelist - do build
+branches:
+  only:
+  - master
+  - stable
