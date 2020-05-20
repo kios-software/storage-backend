@@ -1,16 +1,13 @@
 language: java
-
-# blocklist - do not build
 branches:
   except:
   - legacy
   - experimental
-
-# safelist - do build
-branches:
   only:
   - master
   - stable
-sudo: true
 before_install:
-  - chmod +x mvnw
+- chmod +x mvnw
+notifications:
+  slack:
+    secure: F9+rDd8GYtzemLAHKifKdfEyp5lX7bvBVV5u29E2GPd+3x/UmpPtROf1ZdWUr/p+b3NS/DOe5jdHnFpld43oFwgFVNjE7rtHBu/9unXi3QGxWxj5KbAfzFN3LpCAEt5ucxWAkVbGjm3iUxiVuKKLITwMYq2jEMzV/e7ruImp8WCkelx+yD6fY2JtQWQ7y6/TGDF7F0178p5nV0z1qzfKhCp1sCFobwa4FEAbgFhW+C2/LKJp1AwAnIdJW3Z5LYPx95xxfAuX6pdUqhghuPZ9/wBf41X87DW9m5W4ffH3hfCCHreAcK30j0QBDaBdN4IO0TRkjTrRc3dTfVSQmvp+zTaILzp/2WQUCwmVdB891+xvje/SWVucNgL90reExkrYTsNOpnzfxDTRZNC+79KUSv5iY1UZ5Bvpr1Cme+esf7gxmUd485VvIEgfzSNef7IER7k6Q1yR6yeziIQKMXRsBzMS5iM+2RsShLd4SI0+JmV3Koz7EQQqIqDiD+yGQ795+fjmR0Bk5ZxQKB1p+cnvdYk4P3F89EUU7cxhWzIfOx5br/CdyzCWU5NTgwqeXrN4bs6YzATe3M3bYaJVxnXXmXMpxXt0ucL2dfliU28RnMEQfgJjYvJWhXmh6uuoBNWVqlXcTWgRMlvqlVWqYtLAjBOq4d+AQtKFN38n9f0C8sE=
