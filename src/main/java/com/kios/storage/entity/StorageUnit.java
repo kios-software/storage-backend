@@ -67,5 +67,3 @@ public class StorageUnit {
 		this.property = property;
 	}
 }
-
-enum StorageClass { VEHICLE, BOX, OTHER }

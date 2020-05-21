@@ -33,6 +33,7 @@ public class Storage {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	/* Not needed for persistence */
 	private Long ownerId;
 	
 	public Long getOwnerId() {
@@ -42,6 +43,10 @@ public class Storage {
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
+
+	private float latitude;
+
+	private float longitude;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
@@ -54,6 +59,22 @@ public class Storage {
 
 	public void setProfile(Profile profile) {
 		this.profile = profile;
+	}
+
+	public float getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+
+	public float getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)

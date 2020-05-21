@@ -20,7 +20,7 @@ public class Property {
 	private Long id;
 
 	private Long ownerId;
-	
+
 	public Long getOwnerId() {
 		return ownerId;
 	}
@@ -40,6 +40,8 @@ public class Property {
 	@JoinColumn(name = "storage_unit_id")
 	@JsonBackReference(value = "storage-unit-property")
 	private StorageUnit storageUnit;
+
+	private StorageClass storageClass;
 
 	public Long getId() {
 		return id;
@@ -66,5 +68,11 @@ public class Property {
 
 	public void setStorageUnit(StorageUnit storageUnit) {
 		this.storageUnit = storageUnit;
+	}
+	public StorageClass getStorageClass() {
+		return storageClass;
+	}
+	public void setStorageClass(StorageClass storageClass) {
+		this.storageClass = storageClass;
 	}
 }

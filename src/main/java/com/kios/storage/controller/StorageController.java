@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kios.storage.entity.Profile;
+import com.kios.storage.dto.PropertyStorageRequest;
 import com.kios.storage.entity.Storage;
 import com.kios.storage.serviceimpl.ProfileServiceImpl;
 import com.kios.storage.serviceimpl.StorageServiceImpl;
@@ -58,6 +58,12 @@ public class StorageController implements CrudController<Storage, Long> {
 	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		boolean success = storageService.deleteEntity(id);
 		return new ResponseEntity<>(success, HttpStatus.OK);
+	}
+
+	@PostMapping("/storeProperty")
+	public ResponseEntity<Storage> storeProperty(@RequestBody PropertyStorageRequest propertyStorageRequest) {
+		Storage response = storageService.storeProperty(propertyStorageRequest);
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }
