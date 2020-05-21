@@ -113,7 +113,8 @@ public class StorageServiceImpl implements StorageService {
 		applicableUnits.removeIf(unit ->
 					(unit.getSize() != property.getSize()) ||
 					(unit.getStorageClass()  != property.getStorageClass()) ||
-					(unit.getProperty() != null));
+					(unit.getProperty() != null) ||
+					(storage.getOwnerId() == property.getOwnerId()));
 
 		if(applicableUnits.size() == 0)
 			throw new NoUsableUnitException("Unable to find a storage unit which fits given requirements");
