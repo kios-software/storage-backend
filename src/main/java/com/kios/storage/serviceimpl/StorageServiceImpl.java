@@ -1,8 +1,6 @@
 package com.kios.storage.serviceimpl;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -111,7 +109,7 @@ public class StorageServiceImpl implements StorageService {
 		List<StorageUnit> applicableUnits = storage.getStorageUnits();
 
 		applicableUnits.removeIf(unit ->
-					(unit.getSize() != property.getSize()) ||
+					(unit.getSize().value < property.getSize().value) ||
 					(unit.getStorageClass()  != property.getStorageClass()) ||
 					(unit.getProperty() != null) ||
 					(storage.getOwnerId() == property.getOwnerId()));

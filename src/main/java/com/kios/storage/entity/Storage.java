@@ -48,6 +48,9 @@ public class Storage {
 
 	private float longitude;
 
+	// TODO: Implement LoadFactor
+	private float loadFactor;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
 	@JsonBackReference(value = "profile-storage")
@@ -94,6 +97,14 @@ public class Storage {
 	public Long getId() {
 		return id;
 	}
+	public float getLoadFactor() {
+		return loadFactor;
+	}
+
+	public void setLoadFactor(float loadFactor) {
+		this.loadFactor = loadFactor;
+	}
+
 	public Set<StorageOption> getStorageOptions() {
 		return storageOptions;
 	}
