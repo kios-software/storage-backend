@@ -18,18 +18,18 @@ import com.kios.storage.util.ProfileNotFoundException;
 public class PropertyServiceImpl implements PropertyService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(PropertyService.class);
-	
+
 	@Autowired
 	PropertyRepository propertyRepository;
-	
+
 	@Autowired
 	ProfileServiceImpl profileService;
-	
+
 	@Override
 	public Property createEntity(Property toSave) {
 		LOG.info("Here");
 //		if(propertyRepository contains toSave) <-- TODO What checks should I do here?
-		if(toSave.getOwnerId() == null) {
+		if (toSave.getOwnerId() == null) {
 			LOG.info("Owner ID: " + toSave.getOwnerId());
 			throw new BadRequestException("Null OwnerId provided");
 		} else {

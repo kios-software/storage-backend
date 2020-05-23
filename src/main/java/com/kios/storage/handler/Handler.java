@@ -10,16 +10,15 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 /**
- * Handler for requests to Lambda function.
- * Currently unused
- * TODO Remove or clean up
+ * Handler for requests to Lambda function. Currently unused TODO Remove or
+ * clean up
  */
 public class Handler implements RequestHandler<Object, Object> {
-    public Object handleRequest(final Object input, final Context context) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        return new GatewayResponse(new JSONObject().put("Output", "Hello World!").toString(), headers, 200);
-    }
+	public Object handleRequest(final Object input, final Context context) {
+		Map<String, String> headers = new HashMap<>();
+		headers.put("Content-Type", "application/json");
+		return new GatewayResponse(new JSONObject().put("Output", "Hello World!").toString(), headers, 200);
+	}
 }
 
 /**
@@ -27,25 +26,25 @@ public class Handler implements RequestHandler<Object, Object> {
  */
 class GatewayResponse {
 
-    private final String body;
-    private final Map<String, String> headers;
-    private final int statusCode;
+	private final String body;
+	private final Map<String, String> headers;
+	private final int statusCode;
 
-    public GatewayResponse(final String body, final Map<String, String> headers, final int statusCode) {
-        this.statusCode = statusCode;
-        this.body = body;
-        this.headers = Collections.unmodifiableMap(new HashMap<>(headers));
-    }
+	public GatewayResponse(final String body, final Map<String, String> headers, final int statusCode) {
+		this.statusCode = statusCode;
+		this.body = body;
+		this.headers = Collections.unmodifiableMap(new HashMap<>(headers));
+	}
 
-    public String getBody() {
-        return body;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
+	public Map<String, String> getHeaders() {
+		return headers;
+	}
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+	public int getStatusCode() {
+		return statusCode;
+	}
 }

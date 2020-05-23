@@ -15,11 +15,11 @@ import com.kios.storage.service.PropertyService;
 
 @RestController
 @RequestMapping("/api/property")
-public class PropertyController implements CrudController<Property, Long>{
+public class PropertyController implements CrudController<Property, Long> {
 
 	@Autowired
 	PropertyService propertyService;
-	
+
 	@Override
 	@PostMapping("/create")
 	public ResponseEntity<Property> create(@RequestBody Property request) {

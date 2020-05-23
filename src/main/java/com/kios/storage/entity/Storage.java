@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /* 
@@ -28,14 +30,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  * 
  */
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Storage {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	/* Not needed for persistence */
 	private Long ownerId;
-	
+
 	public Long getOwnerId() {
 		return ownerId;
 	}
@@ -51,11 +54,16 @@ public class Storage {
 	// TODO: Implement LoadFactor
 	private float loadFactor;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
 	@JsonBackReference(value = "profile-storage")
 	private Profile profile;
-	
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "storage_id")
+	@JsonManagedReference(value = "storage-property")
+	private List<Property> property;
+
 	public Profile getProfile() {
 		return profile;
 	}
@@ -80,23 +88,13 @@ public class Storage {
 		this.longitude = longitude;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "storage_id")
-	@JsonManagedReference(value = "storage-storage-unit")
-	private List<StorageUnit> storageUnits;
-	
 	@ElementCollection
 	private Set<StorageOption> storageOptions;
-	
-	public List<StorageUnit> getStorageUnits() {
-		return storageUnits;
-	}
-	public void setStorageUnits(List<StorageUnit> storageUnits) {
-		this.storageUnits = storageUnits;
-	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public float getLoadFactor() {
 		return loadFactor;
 	}
@@ -108,10 +106,20 @@ public class Storage {
 	public Set<StorageOption> getStorageOptions() {
 		return storageOptions;
 	}
+
 	public void setStorageOptions(Set<StorageOption> storageOptions) {
 		this.storageOptions = storageOptions;
 	}
+
+	public List<Property> getProperty() {
+		return property;
+	}
+
+	public void setProperty(List<Property> property) {
+		this.property = property;
+	}
 }
 
-
-enum StorageOption { AIR_CONDITIONING, HEATING, ALWAYS_ACCESSIBLE, SECURITY_ALARMS, GUARDED, EXCLUSIVE }
+enum StorageOption {
+	AIR_CONDITIONING, HEATING, ALWAYS_ACCESSIBLE, SECURITY_ALARMS, GUARDED, EXCLUSIVE
+}

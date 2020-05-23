@@ -2,8 +2,6 @@ package com.kios.storage.controller;
 
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,16 +26,14 @@ import com.kios.storage.serviceimpl.StorageServiceImpl;
 @RequestMapping("/api/storage")
 public class StorageController implements CrudController<Storage, Long> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StorageController.class);
-	
 	@Autowired
 	StorageServiceImpl storageService;
 
 	@Autowired
 	ProfileServiceImpl profileService;
-	
+
 	@PostMapping("/create")
-	public ResponseEntity<Storage> create(@RequestBody Storage request) { 
+	public ResponseEntity<Storage> create(@RequestBody Storage request) {
 		Storage response = storageService.createEntity(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -65,5 +61,5 @@ public class StorageController implements CrudController<Storage, Long> {
 		Storage response = storageService.storeProperty(propertyStorageRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-
+	
 }

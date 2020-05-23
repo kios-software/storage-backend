@@ -1,6 +1,6 @@
 package com.kios.storage.serviceimpl;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -12,14 +12,11 @@ import com.kios.storage.dto.PropertyStorageRequest;
 import com.kios.storage.entity.Profile;
 import com.kios.storage.entity.Property;
 import com.kios.storage.entity.Storage;
-import com.kios.storage.entity.StorageUnit;
+import com.kios.storage.repository.PropertyRepository;
 import com.kios.storage.repository.StorageRepository;
-import com.kios.storage.repository.StorageUnitRepository;
 import com.kios.storage.service.StorageService;
 import com.kios.storage.util.BadRequestException;
-import com.kios.storage.util.NoUsableUnitException;
 import com.kios.storage.util.ProfileNotFoundException;
-import com.kios.storage.util.PropertyNotFoundException;
 import com.kios.storage.util.StorageNotFoundException;
 
 @Service
@@ -31,7 +28,7 @@ public class StorageServiceImpl implements StorageService {
 	StorageRepository storageRepository;
 
 	@Autowired
-	StorageUnitRepository storageUnitRepository;
+	PropertyRepository propertyRepository;
 
 	/* My attempt at keeping the two services separate for microservice */
 	@Autowired
@@ -42,16 +39,13 @@ public class StorageServiceImpl implements StorageService {
 
 	@Override
 	public Storage createEntity(Storage toSave) {
-		if(toSave.getOwnerId() == null) {
+		toSave.setProperty(new ArrayList<>());
+		if (toSave.getOwnerId() == null) {
 			throw new BadRequestException("Null OwnerId provided");
 		} else {
 			Profile p = profileService.retrieveEntity(toSave.getOwnerId())
 					.orElseThrow(() -> new ProfileNotFoundException("Profile not found"));
 			toSave.setProfile(p);
-			toSave.getStorageUnits().forEach(s->{
-				s.setProperty(null);
-				storageUnitRepository.save(s);
-			});
 			return storageRepository.save(toSave);
 		}
 	}
@@ -71,7 +65,7 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public boolean deleteEntity(Long id) {
 		try {
-			storageRepository.deleteById(id);	
+			storageRepository.deleteById(id);
 			return true;
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
@@ -82,41 +76,22 @@ public class StorageServiceImpl implements StorageService {
 	@Override
 	public Storage storeProperty(PropertyStorageRequest propertyStorageRequest) {
 		// What needs to be considered? TODO!
-		//  - Does the storage support this property type?
-		// 	- Can this property fit the storage? There should be some front end checking but
-		// 	  I should probably check this here. How strict do I want to be about this? What
-		//    happens if someone mislabeled their property and it CAN fit in this property?
-		//    How can I get a more accurate prediction of sizing?
-		//	- Is this storage available during this time frame?
-		Property property = propertyService.retrieveEntity(propertyStorageRequest.getPropertyId())
-				.orElseThrow(() -> new PropertyNotFoundException("Property was not found"));
+		// How can I get a more accurate prediction of sizing?
+		// Is this storage available during this time frame?
+		Property property = propertyRepository.getOne(propertyStorageRequest.getPropertyId());
 
 		Storage storage = retrieveEntity(propertyStorageRequest.getStorageId())
 				.orElseThrow(() -> new StorageNotFoundException("Storage was not found"));
 
-		StorageUnit storageUnit = getApplicableStorageUnit(storage, property);
+		// TODO
+		// Check if the property is already stored elsewhere
+		property.setStorage(storage);
 
-		StorageUnit fromRepository = storageUnitRepository.getOne(storageUnit.getId());
-		fromRepository.setProperty(property);
-
-		storageUnitRepository.save(fromRepository);
-
+		propertyRepository.save(property);
 		return storage;
 	}
 
-	// this will be SUPER restrictive - loosen this up! TODO
-	public StorageUnit getApplicableStorageUnit(Storage storage, Property property) {
-		List<StorageUnit> applicableUnits = storage.getStorageUnits();
-
-		applicableUnits.removeIf(unit ->
-					(unit.getSize().value < property.getSize().value) ||
-					(unit.getStorageClass()  != property.getStorageClass()) ||
-					(unit.getProperty() != null) ||
-					(storage.getOwnerId() == property.getOwnerId()));
-
-		if(applicableUnits.size() == 0)
-			throw new NoUsableUnitException("Unable to find a storage unit which fits given requirements");
-		else
-			return applicableUnits.get(0);
+	public float calculateLoadFactor(Storage storage, Property property) {
+		throw new RuntimeException("Not yet implemented");
 	}
 }

@@ -8,11 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
+// When an object is lazy loaded, Hibernate adds some extra data to it to manage
+// the interaction. This annotation will make sure that Jackson doesn't serialize
+// said data in the client response.
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Property {
 
 	@Id
@@ -36,16 +40,17 @@ public class Property {
 
 	private Size size;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "storage_unit_id")
-	@JsonBackReference(value = "storage-unit-property")
-	private StorageUnit storageUnit;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "storage_id")
+	@JsonBackReference(value = "storage-property")
+	private Storage storage;
 
 	private StorageClass storageClass;
 
 	public Long getId() {
 		return id;
 	}
+
 	public Profile getProfile() {
 		return profile;
 	}
@@ -62,17 +67,19 @@ public class Property {
 		this.size = size;
 	}
 
-	public StorageUnit getStorageUnit() {
-		return storageUnit;
-	}
-
-	public void setStorageUnit(StorageUnit storageUnit) {
-		this.storageUnit = storageUnit;
-	}
 	public StorageClass getStorageClass() {
 		return storageClass;
 	}
+
 	public void setStorageClass(StorageClass storageClass) {
 		this.storageClass = storageClass;
+	}
+
+	public Storage getStorage() {
+		return storage;
+	}
+
+	public void setStorage(Storage storage) {
+		this.storage = storage;
 	}
 }

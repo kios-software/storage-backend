@@ -21,7 +21,7 @@ public class ProfileController implements CrudController<Profile, Long> {
 
 	@Autowired
 	ProfileServiceImpl profileService;
-	
+
 	@Override
 	@PostMapping("/create")
 	public ResponseEntity<Profile> create(@RequestBody Profile request) {
