@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Profile {
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@OneToMany
 	@JoinColumn(name = "profile_id")
 	@JsonManagedReference(value = "profile-storage")
@@ -27,7 +27,7 @@ public class Profile {
 	@JoinColumn(name = "profile_id")
 	@JsonManagedReference(value = "profile-property")
 	private List<Property> property;
-	
+
 //	private Long userId;
 	private ProfileType profileType;
 
@@ -50,7 +50,7 @@ public class Profile {
 	public Long getId() {
 		return id;
 	}
-	
+
 //	public Long getUserId() {
 //		return userId;
 //	}
@@ -66,7 +66,7 @@ public class Profile {
 	public void setProfileType(ProfileType profileType) {
 		this.profileType = profileType;
 	}
-	
+
 //	public Profile(Long userId, ProfileType profileType) {
 ////		this.userId = userId;
 //		this.profileType = profileType;
@@ -83,4 +83,6 @@ public class Profile {
 	}
 }
 
-enum ProfileType { USER_PROFILE, PROVIDER_PROFILE }
+enum ProfileType {
+	USER_PROFILE, PROVIDER_PROFILE
+}

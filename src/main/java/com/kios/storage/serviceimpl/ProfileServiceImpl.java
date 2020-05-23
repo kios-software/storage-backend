@@ -12,9 +12,9 @@ import com.kios.storage.service.ProfileService;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
-	@Autowired	
+	@Autowired
 	ProfileRepository profileRepository;
-	
+
 	@Override
 	public Profile createEntity(Profile toSave) {
 		return profileRepository.save(toSave);
