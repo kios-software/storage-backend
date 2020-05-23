@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /* 
  * This class represents the physical storage available to lease out to others
@@ -51,8 +53,10 @@ public class Storage {
 
 	private float longitude;
 
-	// TODO: Implement LoadFactor
+	@JsonProperty(access = Access.READ_ONLY)
 	private float loadFactor;
+
+	private float scale;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id")
@@ -117,6 +121,18 @@ public class Storage {
 
 	public void setProperty(List<Property> property) {
 		this.property = property;
+	}
+
+	public float getScale() {
+		return scale;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	public Storage() {
+		this.loadFactor = 100.00f;
 	}
 }
 

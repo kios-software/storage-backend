@@ -17,7 +17,7 @@ import com.kios.storage.repository.StorageRepository;
 import com.kios.storage.service.StorageService;
 import com.kios.storage.util.BadRequestException;
 import com.kios.storage.util.ProfileNotFoundException;
-import com.kios.storage.util.StorageNotFoundException;
+import com.kios.storage.util.UnusableStorageException;
 
 @Service
 public class StorageServiceImpl implements StorageService {
@@ -73,6 +73,13 @@ public class StorageServiceImpl implements StorageService {
 		}
 	}
 
+	/*
+	 * First pass attempt at implementing load factor. The idea is the "scale" in
+	 * storage is equivalent to one unit of the smallest entity being stored. In
+	 * other words, Property.Size.SMALL * Scale should equal Scale.
+	 * Property.Size.MEDIUM * Scale should equal 2(Scale), Large 3(Scale), etc. This
+	 * was we can kinda support relative sizing.
+	 */
 	@Override
 	public Storage storeProperty(PropertyStorageRequest propertyStorageRequest) {
 		// What needs to be considered? TODO!
@@ -80,18 +87,30 @@ public class StorageServiceImpl implements StorageService {
 		// Is this storage available during this time frame?
 		Property property = propertyRepository.getOne(propertyStorageRequest.getPropertyId());
 
-		Storage storage = retrieveEntity(propertyStorageRequest.getStorageId())
-				.orElseThrow(() -> new StorageNotFoundException("Storage was not found"));
+		Storage storage = storageRepository.getOne(propertyStorageRequest.getStorageId());
 
-		// TODO
-		// Check if the property is already stored elsewhere
+		float newLoadFactor = calculateLoadFactor(property, storage);
+
+		// probably switch to try catch and return a more meaningful error response :)
+		if (!validateIfPropertyCanBeStored(property, storage, newLoadFactor))
+			throw new UnusableStorageException("Error attempting to store property");
+
 		property.setStorage(storage);
+		storage.setLoadFactor(newLoadFactor);
 
+		storageRepository.save(storage);
 		propertyRepository.save(property);
+
 		return storage;
 	}
 
-	public float calculateLoadFactor(Storage storage, Property property) {
-		throw new RuntimeException("Not yet implemented");
+	@Override
+	public boolean validateIfPropertyCanBeStored(Property property, Storage storage, float newLoadFactor) {
+		return newLoadFactor > 0 && property.getStorage() == null;
+	}
+	
+	@Override
+	public float calculateLoadFactor(Property property, Storage storage) {
+		return storage.getLoadFactor() - storage.getScale() * property.getSize().value;
 	}
 }

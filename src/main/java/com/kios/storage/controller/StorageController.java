@@ -61,5 +61,5 @@ public class StorageController implements CrudController<Storage, Long> {
 		Storage response = storageService.storeProperty(propertyStorageRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 }

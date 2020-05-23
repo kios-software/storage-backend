@@ -27,10 +27,8 @@ public class PropertyServiceImpl implements PropertyService {
 
 	@Override
 	public Property createEntity(Property toSave) {
-		LOG.info("Here");
 //		if(propertyRepository contains toSave) <-- TODO What checks should I do here?
 		if (toSave.getOwnerId() == null) {
-			LOG.info("Owner ID: " + toSave.getOwnerId());
 			throw new BadRequestException("Null OwnerId provided");
 		} else {
 			Profile p = profileService.retrieveEntity(toSave.getOwnerId())

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 //https://www.toptal.com/java/spring-boot-rest-api-error-handling
 //^ might be helpful?
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NoUsableUnitException extends RuntimeException {
-	public NoUsableUnitException(String message) {
+public class UnusableStorageException extends RuntimeException {
+	public UnusableStorageException(String message) {
 		super(message);
 	}
 }
