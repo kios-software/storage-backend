@@ -5,6 +5,7 @@ branches:
   - experimental
   only:
   - master
+  - develop
   - stable
 before_install:
 - chmod +x mvnw
