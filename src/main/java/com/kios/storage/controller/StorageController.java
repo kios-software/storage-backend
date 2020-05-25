@@ -1,5 +1,6 @@
 package com.kios.storage.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kios.storage.dto.PropertyStorageRequest;
 import com.kios.storage.entity.Storage;
 import com.kios.storage.serviceimpl.ProfileServiceImpl;
+import com.kios.storage.serviceimpl.SearchServiceImpl;
 import com.kios.storage.serviceimpl.StorageServiceImpl;
 
 /* 
@@ -31,6 +34,9 @@ public class StorageController implements CrudController<Storage, Long> {
 
 	@Autowired
 	ProfileServiceImpl profileService;
+	
+	@Autowired
+	SearchServiceImpl searchService;
 
 	@PostMapping("/create")
 	public ResponseEntity<Storage> create(@RequestBody Storage request) {
@@ -59,6 +65,14 @@ public class StorageController implements CrudController<Storage, Long> {
 	@PostMapping("/storeProperty")
 	public ResponseEntity<Storage> storeProperty(@RequestBody PropertyStorageRequest propertyStorageRequest) {
 		Storage response = storageService.storeProperty(propertyStorageRequest);
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/findByLocation")
+	public ResponseEntity<List<Storage>> retrieveStorageWithGeolocation(
+			@RequestParam("latitude") float latitude, 
+			@RequestParam("longitude") float longitude) {
+		List<Storage> response = searchService.retrieveStorageWithGeolocation(latitude, longitude);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

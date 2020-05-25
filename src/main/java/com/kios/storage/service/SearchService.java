@@ -1,5 +1,9 @@
 package com.kios.storage.service;
 
-public interface SearchService {
+import java.util.List;
 
+import com.kios.storage.entity.Storage;
+
+public interface SearchService {
+	List<Storage> retrieveStorageWithGeolocation(float latitude, float longitude);
 }
