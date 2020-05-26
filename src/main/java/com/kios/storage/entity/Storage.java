@@ -68,6 +68,8 @@ public class Storage {
 	@JsonManagedReference(value = "storage-property")
 	private List<Property> property;
 
+	private boolean active;
+	
 	public Profile getProfile() {
 		return profile;
 	}
@@ -131,8 +133,17 @@ public class Storage {
 		this.scale = scale;
 	}
 
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public Storage() {
 		this.loadFactor = 100.00f;
+		this.active = true;
 	}
 }
 
