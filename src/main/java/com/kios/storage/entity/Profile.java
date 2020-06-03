@@ -113,22 +113,14 @@ public class Profile {
 		this.updatedAt = updatedAt;
 	}
 
-	//	public Profile(Long userId, ProfileType profileType) {
-////		this.userId = userId;
-//		this.profileType = profileType;
-//	}
-//	public Profile(ProfileType profileType) {
-//		this.profileType = profileType;
-//		this.property = new ArrayList<>();
-//		this.storage = new ArrayList<>();
-//	}
-//	
+
 	public Profile() {
 		this.property = new ArrayList<>();
 		this.storage = new ArrayList<>();
 	}
 }
 
+@Deprecated
 enum ProfileType {
 	USER_PROFILE, PROVIDER_PROFILE
 }
